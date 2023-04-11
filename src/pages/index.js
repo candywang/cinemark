@@ -2,8 +2,9 @@ import Head from "next/head";
 import { useState, useEffect } from "react";
 import { Flex } from "@chakra-ui/react";
 import axios from "axios";
-import MovieList from "../components/MovieList";
-import SearchBar from "../components/SearchBar";
+import MovieList from "@components/MovieList";
+import SearchBar from "@components/SearchBar";
+import BookmarkedList from "@components/BookmarkedList";
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
@@ -84,6 +85,27 @@ export default function Home() {
     }
   }, [search]);
 
+  const onWatched = (movie) => {
+    const bookmarkedMovies = getBookmarkedMovies();
+    const updatedMovies = bookmarkedMovies.map((m) => {
+      if (m.imdbID === movie.imdbID) {
+        m.watched = true;
+      }
+      return m;
+    });
+    localStorage.setItem("bookmarkedMovies", JSON.stringify(updatedMovies));
+    setBookmarkedMovies(updatedMovies);
+  };
+
+  const onRemove = (movie) => {
+    const bookmarkedMovies = getBookmarkedMovies();
+    const updatedMovies = bookmarkedMovies.filter(
+      (m) => m.imdbID !== movie.imdbID
+    );
+    localStorage.setItem("bookmarkedMovies", JSON.stringify(updatedMovies));
+    setBookmarkedMovies(updatedMovies);
+  };
+
   return (
     <>
       <Head>
@@ -105,18 +127,21 @@ export default function Home() {
           {searching ? (
             <div>Searching</div>
           ) : (
-            <MovieList
-              movies={movies}
-              bookmarkedMovies={bookmarkedMovies}
-              handleBookmark={handleBookmark}
-            />
+            <>
+              Search Results:
+              <MovieList
+                movies={movies}
+                bookmarkedMovies={bookmarkedMovies}
+                handleBookmark={handleBookmark}
+              />
+            </>
           )}
           Bookmarks:
           {bookmarkedMovies ? (
-            <MovieList
-              movies={bookmarkedMovies}
+            <BookmarkedList
               bookmarkedMovies={bookmarkedMovies}
-              handleBookmark={handleBookmark}
+              onRemove={onRemove}
+              onWatched={onWatched}
             />
           ) : null}
         </Flex>
