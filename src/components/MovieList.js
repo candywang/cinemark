@@ -3,15 +3,20 @@ import MovieCard from "./MovieCard";
 
 const MovieList = ({ movies, bookmarkedMovies, handleBookmark }) => (
   <List spacing={3}>
-    {movies.map((movie) => (
-      <ListItem key={movie.imdbID}>
-        <MovieCard
-          movie={movie}
-          bookmarkedMovies={bookmarkedMovies}
-          handleBookmark={handleBookmark}
-        />
-      </ListItem>
-    ))}
+    {movies.map((movie) => {
+      const isBookmarked = bookmarkedMovies.filter(
+        (m) => m.imdbID !== movie.imdbID
+      ).length;
+      return (
+        <ListItem key={movie.imdbID}>
+          <MovieCard
+            movie={movie}
+            isBookmarked={isBookmarked}
+            handleBookmark={handleBookmark}
+          />
+        </ListItem>
+      );
+    })}
   </List>
 );
 

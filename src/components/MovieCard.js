@@ -9,9 +9,8 @@ import {
 } from "@chakra-ui/react";
 import BookmarkButton from "./BookmarkButton";
 
-const MovieCard = ({ movie, bookmarkedMovies, handleBookmark }) => {
-  const {imdbID, Poster, Title, Year } = movie;
-  const isBookmarked = bookmarkedMovies.filter((m) => m.imdbID !== imdbID).length;
+const MovieCard = ({ movie, isBookmarked, handleBookmark }) => {
+  const { Poster, Title, Year } = movie;
 
   return (
     <Card
@@ -31,7 +30,6 @@ const MovieCard = ({ movie, bookmarkedMovies, handleBookmark }) => {
           <Text py="2">{Year}</Text>
         </CardBody>
         <CardFooter>
-          ={" "}
           <BookmarkButton
             isBookmarked={isBookmarked}
             onToggle={() => handleBookmark(movie)}
