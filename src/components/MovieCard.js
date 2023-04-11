@@ -6,11 +6,12 @@ import {
   Stack,
   Heading,
   Text,
-  Button,
 } from "@chakra-ui/react";
+import BookmarkButton from "./BookmarkButton";
 
-const MovieCard = ({ movie, onBookmark }) => {
-  const { Poster, Title, Year } = movie;
+const MovieCard = ({ movie, bookmarkedMovies, handleBookmark }) => {
+  const {imdbID, Poster, Title, Year } = movie;
+  const isBookmarked = bookmarkedMovies.filter((m) => m.imdbID !== imdbID).length;
 
   return (
     <Card
@@ -30,7 +31,11 @@ const MovieCard = ({ movie, onBookmark }) => {
           <Text py="2">{Year}</Text>
         </CardBody>
         <CardFooter>
-          <Button onClick={onBookmark}>Bookmark</Button>
+          ={" "}
+          <BookmarkButton
+            isBookmarked={isBookmarked}
+            onToggle={() => handleBookmark(movie)}
+          />
         </CardFooter>
       </Stack>
     </Card>
